@@ -1,72 +1,61 @@
-/* button is handler */
-const searchBook = () => {
-    const searchInput = document.getElementById('input-field');
+const searchButton = () => {
+    const searchInput = document.getElementById('input-field')
     const searchText = searchInput.value;
-    // error handling
-    const errorContainer = document.getElementById('error-container');
-    const div = document.createElement('div');
-    div.classList.add('err-div');
-    if (searchText === "") {
-        console.log(searchText);
-        div.innerHTML = `
-            <h4>Empty input</h4>
-        `;
-        errorContainer.appendChild(div);
-
-
-    }
-
-    else {
-        errorContainer.textContent = '';
-        userData(searchText);
-        searchInput.value = '';
-    }
-    // div.innerHTML = '';
-
-
-}
-
-const userData = data => {
-    console.log(data);
-    const url = `https://openlibrary.org/search.json?q=${data}`;
+    const url = `https://openlibrary.org/search.json?q=${searchText}`;
     fetch(url)
         .then(res => res.json())
-        .then(data =>
-            /*   console.log(data.docs[0].title_suggest, data.docs[0].author_name, data.docs[2].publish_place, data.docs[0].first_publish_year, data.docs[0].author_name, data.docs[3].cover_i) */
-            loadData(data.docs[0].title_suggest, data.docs[0].author_name, data.docs[2].first_publish_year, data.docs[2].publish_place, data.docs[0].first_publish_year, data.docs[0].publish_place, data.docs[0].publish_date, data.docs[0].author_name, data.docs[3].cover_i));
+        .then(data => displayData(data.docs));
+}
+let count = 0;
+const displayData = datas => {
+    const len = datas.length;
+    totalBook(len);
+
+    datas.forEach(data => {
+        if (count == 4) {
+            return;
+        }
+        else {
+            // console.log(datas.title);
+            // console.log('first published', data.first_publish_year);
+            // console.log('year published', data.first_publish_year);
+            // console.log('author name', data.author_name);
+            // console.log('first published', data.publisher);
+            // console.log('first published', data.cover_i);
+            count++;
+            loadData(data.title, data.author_name[0], data.first_publish_year, data.publisher, data.cover_i);
+
+        }
+
+    })
+    // clear input 
+    searchInput.value = '';
 }
 
+// total book found
+const totalBook = len => {
+    // total search result count
+    const searchResutl = document.getElementById('total-book');
+    const p = document.createElement('p');
+    p.innerHTML = `Total search Result = ${len}`;
+    searchResutl.appendChild(p);
+}
 
-// data see web page
-
-const loadData = (book, writter, pulisher, firstReleased, releasePleaced, published_data, imgNo) => {
-    const dataDiv = document.getElementById('load-data');
+const loadData = (name, writter, firstPublished, Photo, len) => {
+    // show search result in the display
+    const loadData = document.getElementById('load-data');
     const div = document.createElement('div');
     div.classList.add('col');
-    div.innerHTML =
-        `<div class="card">
-            <img height="250px" src="https://covers.openlibrary.org/b/id/${imgNo}-M.jpg" class="card-img-top" alt="...">
+    div.innerHTML = `
+        <div class="card">
+            <img height="250px" src="https://covers.openlibrary.org/b/id/${Photo}-M.jpg" class="card-img-top" alt="...">
                 <div class="card-body">
-                    <h5 class="card-title">BooK Name: ${book}</h5>
-                    <p class="card-text">Author Name: ${writter}</p>
-                    <p>First Published: ${pulisher}</p>
-                    <p>First Publication: ${firstReleased}</p>
-                    <p>Released Pleaced: ${releasePleaced}</p>
-                    <p>Published city: ${published_data}</p>
+                    <h5 class="card-title">Book Name : ${name}</h5>
+                    <p class="card-text">Author Name : ${writter}</p>
+                    <p class="card-text">First Published : ${firstPublished}</p>
                 </div>
-            </div>`;
-    dataDiv.appendChild(div);
+            </div>
+        `;
+    loadData.append(div);
 
 }
-
-
-
-/* const userData = data => {
-    // console.log(data);
-    const url = `https://openlibrary.org/search.json?q=${data}`;
-    // console.log(url);
-    const addDiv = document.getElementById('add-detail');
-    fetch(url)
-        .then(res => res.json())
-        .then(data => console.log(data.docs[0].title_suggest, data.docs[0].author_name, data.docs[2].publish_place, data.docs[0].first_publish_year, data.docs[0].author_name, data.docs[3].cover_i));
-} */

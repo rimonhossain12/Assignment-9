@@ -1,6 +1,11 @@
-// erro handling function
-document.getElementById('error-message').style.display = "none";
-
+/*
+    আসসালামু আলাইকুম ভাইয়া  আমি একটা বিষয় জানতে চাই যে  গুলো কোড গুলোই এই সমাধানের জন্যে  ঠিক আছে নাকি আরো কম লাইন এর কোড লিখে প্রব্লেমে টার  সমাধান করা যাবে। ধন্যবাদ এই বিষয়টা জানাতে ভুলবেন না প্লিজ
+*/
+// error handling function
+document.getElementById('error-message').style.display = 'none';
+// total search text
+document.getElementById('total-result').style.display = 'none';
+// button click function
 const searchButton = () => {
     const searchInput = document.getElementById('input-field');
     const searchText = searchInput.value;
@@ -8,63 +13,57 @@ const searchButton = () => {
     searchInput.value = '';
     // error messages
     document.getElementById('error-message').style.display = "none";
+    // total search result count;
+    document.getElementById('total-result').innerHTML = '';
+    // delete previous all the data from web page
+    const loadData = document.getElementById('load-data');
+    loadData.textContent = '';
     const url = `https://openlibrary.org/search.json?q=${searchText}`;
     if (searchText == '') {
         document.getElementById('error-message').style.display = "block";
+        return;
     }
     else {
+
         fetch(url)
             .then(res => res.json())
-            .then(data => displayData(data.docs))
-            .catch(error => displayError(error));
+            .then(data => displayData(data.docs));
+        displaylen(searchText);
     }
 }
-
-
-// erro messages 
-const displayError = error => {
-    document.getElementById('error-message').style.display = "block";
-}
-
-let count = 0;
+// total search display I am displaying 10 search result bcz my internet speed is very slow.
+let count = 1;
 const displayData = datas => {
-    const len = datas.length;
-    totalBook(len);
-
+    count++;
     datas.forEach(data => {
         if (count == 10) {
             return;
         }
         else {
-            // console.log(datas.title);
-            // console.log('first published', data.first_publish_year);
-            // console.log('year published', data.first_publish_year);
-            // console.log('author name', data.author_name);
-            // console.log('first published', data.publisher);
-            console.log('first published', data.cover_i);
             count++;
-            loadData(data.title, data.author_name[0], data.first_publish_year, data.publisher, data.cover_i, data.publish_date);
-
+            // totalBook(data.num_found);
+            loadData(data.title, data.author_name[0], data.first_publish_year, data.cover_i, data.publisher, data.publish_date[0]);
         }
-
     })
-
-
 }
-
 // total book found
-const totalBook = len => {
-    // total search result count
-    const searchResutl = document.getElementById('total-book');
-    const p = document.createElement('p');
-    p.innerHTML = `Total search Result = ${len}`;
-    searchResutl.appendChild(p);
-}
+const displaylen = searchText => {
+    const url = `https://openlibrary.org/search.json?q=${searchText}`;
+    fetch(url)
+        .then(res => res.json())
+        .then(data => totalBook(data.num_found));
 
-const loadData = (name, writter, firstPublished, Photo, len, publishedDate) => {
+}
+const totalBook = len => {
+    const lngth = len;
+    document.getElementById('total-result').style.display = 'block';
+    document.getElementById('total-result').innerText = `total search result ${lngth}`;
+}
+const loadData = (name, writter, firstPublished, Photo, publishedDate) => {
     // show search result in the display
     const loadData = document.getElementById('load-data');
     const div = document.createElement('div');
+    // clean display search result value
     div.classList.add('col');
     div.innerHTML = `
         <div class="card">

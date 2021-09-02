@@ -1,4 +1,16 @@
+
 .err-div {
     text-align: center;
     font-weight: bold;
+}
+.card {
+    border: 1px solid;
+    padding: 10px;
+    box-shadow: 2px 3px #888888;
+}
+
+.card:hover {
+    border: 1px solid;
+    padding: 10px;
+    box-shadow: 5px 10px #888888;
 }

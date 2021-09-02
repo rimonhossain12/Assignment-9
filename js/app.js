@@ -1,28 +1,31 @@
 // erro handling function
-
-const errorDiv = document.getElementById('error-div');
-const p = document.createElement('p');
-
+document.getElementById('error-message').style.display = "none";
 
 const searchButton = () => {
-    const searchInput = document.getElementById('input-field')
+    const searchInput = document.getElementById('input-field');
     const searchText = searchInput.value;
+    // clear input 
+    searchInput.value = '';
+    // error messages
+    document.getElementById('error-message').style.display = "none";
     const url = `https://openlibrary.org/search.json?q=${searchText}`;
     if (searchText == '') {
-        p.innerHTML = `Sorry You have not type anything`;
-        errorDiv.appendChild(p);
+        document.getElementById('error-message').style.display = "block";
     }
     else {
         fetch(url)
             .then(res => res.json())
-            .then(data => displayData(data.docs));
-        p.innerHTML = '';
+            .then(data => displayData(data.docs))
+            .catch(error => displayError(error));
     }
-
-
-    // clear input 
-    searchInput.value = '';
 }
+
+
+// erro messages 
+const displayError = error => {
+    document.getElementById('error-message').style.display = "block";
+}
+
 let count = 0;
 const displayData = datas => {
     const len = datas.length;
@@ -38,9 +41,9 @@ const displayData = datas => {
             // console.log('year published', data.first_publish_year);
             // console.log('author name', data.author_name);
             // console.log('first published', data.publisher);
-            // console.log('first published', data.cover_i);
+            console.log('first published', data.cover_i);
             count++;
-            loadData(data.title, data.author_name[0], data.first_publish_year, data.publisher, data.cover_i);
+            loadData(data.title, data.author_name[0], data.first_publish_year, data.publisher, data.cover_i, data.publish_date);
 
         }
 
@@ -58,7 +61,7 @@ const totalBook = len => {
     searchResutl.appendChild(p);
 }
 
-const loadData = (name, writter, firstPublished, Photo, len) => {
+const loadData = (name, writter, firstPublished, Photo, len, publishedDate) => {
     // show search result in the display
     const loadData = document.getElementById('load-data');
     const div = document.createElement('div');
@@ -70,6 +73,7 @@ const loadData = (name, writter, firstPublished, Photo, len) => {
                     <h5 class="card-title">Book Name : ${name}</h5>
                     <p class="card-text">Author Name : ${writter}</p>
                     <p class="card-text">First Published : ${firstPublished}</p>
+                    <p class="card-text">First Released Date : ${publishedDate}</p>
                 </div>
             </div>
         `;

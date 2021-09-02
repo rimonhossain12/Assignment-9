@@ -11,22 +11,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous">
     </script>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-    <h2 class="text-center mb-5">Programming Book project</h2>
+    <h2 class="text-center mb-5 mt-2 text-warning">Programming languages Book project</h2>
     <div class="input-group mb-3 container w-50">
         <input id="input-field" type="text" class="form-control" placeholder="Please Type book name"
             aria-label="Recipient's username" aria-describedby="button-addon2">
         <button onclick="searchButton()" class="btn btn-outline-secondary" type="button">search</button>
     </div>
     <!-- error message div -->
-    <div id="error-div" class="container text-center">
 
+    <div class="container text-center">
+        <p id="error-message" class="text-danger">Some error please try again</p>
     </div>
 
     <!-- total book found -->
-    <div id="total-book" class="container text-center">
+    <div id="total-book" class="container text-center ">
 
     </div>
 

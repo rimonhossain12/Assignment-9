@@ -1,10 +1,27 @@
+// erro handling function
+
+const errorDiv = document.getElementById('error-div');
+const p = document.createElement('p');
+
+
 const searchButton = () => {
     const searchInput = document.getElementById('input-field')
     const searchText = searchInput.value;
     const url = `https://openlibrary.org/search.json?q=${searchText}`;
-    fetch(url)
-        .then(res => res.json())
-        .then(data => displayData(data.docs));
+    if (searchText == '') {
+        p.innerHTML = `Sorry You have not type anything`;
+        errorDiv.appendChild(p);
+    }
+    else {
+        fetch(url)
+            .then(res => res.json())
+            .then(data => displayData(data.docs));
+        p.innerHTML = '';
+    }
+
+
+    // clear input 
+    searchInput.value = '';
 }
 let count = 0;
 const displayData = datas => {
@@ -12,7 +29,7 @@ const displayData = datas => {
     totalBook(len);
 
     datas.forEach(data => {
-        if (count == 4) {
+        if (count == 10) {
             return;
         }
         else {
@@ -28,8 +45,8 @@ const displayData = datas => {
         }
 
     })
-    // clear input 
-    searchInput.value = '';
+
+
 }
 
 // total book found
@@ -57,5 +74,4 @@ const loadData = (name, writter, firstPublished, Photo, len) => {
             </div>
         `;
     loadData.append(div);
-
 }
